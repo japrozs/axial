@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
 import { Text, View } from "react-native";
 import { MainStack } from "./modules/MainStack";
+import { colors } from "./ui/theme";
 
 interface RoutesProps {}
 
@@ -11,7 +12,7 @@ export default function Routes() {
             theme={{
                 // @ts-ignore
                 colors: {
-                    background: "#fff",
+                    background: colors.dogeBlack,
                 },
             }}
         >

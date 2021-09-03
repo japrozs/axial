@@ -1,22 +1,29 @@
 import { Camera } from "expo-camera";
 import React from "react";
 import { useState } from "react";
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 import { View, Text } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { colors } from "../../ui/theme";
+import { colors, globalStyles, layout } from "../../ui/theme";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { MainStackNav } from "./MainNav";
 import { useApolloClient } from "@apollo/client";
 import { Button } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { Image } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+import { useCreatePostMutation } from "../../generated/graphql";
 
 interface NewPostProps {}
 
 export const NewPost: React.FC<MainStackNav<"NewPost">> = ({ navigation }) => {
     const [description, setDescription] = useState("");
+    const [pictureUri, setPictureUri] = useState("");
     const [file, setFile] = useState({});
     const client = useApolloClient();
+    const [focus, setFocus] = useState(false);
+    const [createPost] = useCreatePostMutation();
 
     const pickImage = async () => {
         const { status } = await Camera.requestPermissionsAsync();
@@ -40,9 +47,10 @@ export const NewPost: React.FC<MainStackNav<"NewPost">> = ({ navigation }) => {
             name: "test-image",
         };
         setFile(file);
+        setPictureUri(uri);
     };
 
-    const upload = async () => {
+    const ImagePostUpload = async () => {
         // upload the picture to the server
         if (file == {}) {
             alert("empty object. returning...");
@@ -69,33 +77,125 @@ export const NewPost: React.FC<MainStackNav<"NewPost">> = ({ navigation }) => {
         }
 
         await client.resetStore();
+        setPictureUri("");
+        setDescription("");
         navigation.navigate("Home");
     };
+
+    const upload = async () => {
+        if (description.trim().length == 0) {
+            alert("Description cannot be empty!");
+        }
+        if (pictureUri.trim().length == 0) {
+            const res = await createPost({
+                variables: {
+                    desc: description,
+                },
+            });
+            console.log(res);
+            await client.resetStore();
+            setPictureUri("");
+            setDescription("");
+            navigation.navigate("Home");
+        } else {
+            ImagePostUpload();
+        }
+    };
     return (
-        <View>
-            <Text onPress={pickImage} style={styles.chooseText}>
-                Choose Image
-            </Text>
+        <View style={styles.container}>
+            {pictureUri.trim().length == 0 ? (
+                <></>
+            ) : (
+                <>
+                    <Image style={styles.img} source={{ uri: pictureUri }} />
+                    <Button
+                        onPress={() => setPictureUri("")}
+                        title={"Remove image"}
+                    />
+                </>
+            )}
+            <View style={[globalStyles.flex, styles.titleContainer]}>
+                <Text style={styles.label}>Post body</Text>
+                <Ionicons
+                    onPress={pickImage}
+                    style={styles.chooseText}
+                    name="md-image-outline"
+                    size={24}
+                    color="black"
+                />
+            </View>
+
             <TextInput
-                style={styles.input}
+                style={[
+                    styles.input,
+                    focus
+                        ? {
+                              borderColor: "#fff",
+                          }
+                        : {
+                              borderColor: colors.borderGray,
+                          },
+                ]}
                 value={description}
+                onFocus={() => setFocus(true)}
+                onBlur={() => setFocus(false)}
+                multiline={true}
                 onChangeText={(t) => setDescription(t)}
             />
-            <Button onPress={upload} title="Upload" />
+            <TouchableOpacity onPress={upload} style={globalStyles.button}>
+                <View style={[globalStyles.flex, { justifyContent: "center" }]}>
+                    <Text style={globalStyles.buttonText}>Create post</Text>
+                    <AntDesign
+                        style={styles.icon}
+                        name="arrowright"
+                        size={24}
+                        color="#fff"
+                    />
+                </View>
+            </TouchableOpacity>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    container: {
+        padding: 13,
+        height: "100%",
+    },
     chooseText: {
-        color: "#007AFF",
-        fontSize: 19,
-        fontWeight: "600",
-        justifyContent: "center",
+        color: "#fff",
+        fontSize: 25,
+        marginLeft: "auto",
+        marginRight: 2,
     },
     input: {
         padding: 10,
-        borderColor: "#000",
+        borderRadius: 4,
+        height: 60,
+        color: "#fff",
         borderWidth: 1,
+    },
+    heading: {
+        fontSize: 25,
+        fontWeight: "600",
+    },
+    label: {
+        color: colors.textGray,
+        fontSize: 20,
+        fontWeight: "600",
+    },
+    titleContainer: {
+        alignItems: "center",
+        marginBottom: 15,
+    },
+    img: {
+        height: Dimensions.get("window").width - 26,
+        width: Dimensions.get("window").width - 26,
+        borderRadius: 3,
+        marginVertical: 10,
+        marginBottom: 20,
+    },
+    icon: {
+        marginLeft: 10,
     },
 });

@@ -1,17 +1,18 @@
+import { Feather } from "@expo/vector-icons";
 import React from "react";
-import { Dimensions } from "react-native";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
+import { Text, View } from "react-native";
 import { Post } from "../generated/graphql";
 import { colors, globalStyles, layout, postHeight } from "../ui/theme";
 import { timeSince } from "../utils/timeSince";
+import { truncate } from "../utils/truncate";
 import { ProfileImage } from "./ProfileImage";
-import { Feather } from "@expo/vector-icons";
 
-interface PostCardProps {
+interface TextPostCardProps {
     post: Post;
 }
 
-export const PostCard: React.FC<PostCardProps> = ({ post }) => {
+export const TextPostCard: React.FC<TextPostCardProps> = ({ post }) => {
     return (
         <View style={styles.container}>
             <View style={[globalStyles.flex, styles.postHeader]}>
@@ -27,33 +28,24 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                     color="white"
                 />
             </View>
-            <Image source={{ uri: post.imgUrl }} style={styles.img} />
-            <View style={styles.postFooter}>
-                <View>
-                    <Text style={{ color: "#fff" }}>likes area</Text>
-                </View>
-                <Text style={styles.likes}>
-                    {post.likes} like{post.likes == 1 ? "" : "s"}
-                </Text>
-                <View style={[globalStyles.flex, { alignItems: "stretch" }]}>
-                    <Text style={styles.usernameDesc}>
-                        {post.creator.username}
-                    </Text>
-                    <Text style={styles.description}>{post.description}</Text>
-                </View>
-                <Text style={styles.time}>{timeSince(post.createdAt)} ago</Text>
-            </View>
+            <Text style={styles.likes}>
+                {post.likes} like{post.likes == 1 ? "" : "s"}
+            </Text>
+            <Text style={styles.description}>
+                {truncate(post.description, 98)}
+            </Text>
+            <Text style={styles.time}>{timeSince(post.createdAt)} ago</Text>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        padding: 0,
+        padding: 14,
     },
     postHeader: {
-        padding: 14,
         alignItems: "center",
+        marginBottom: 10,
     },
     username: {
         color: "#fff",
@@ -76,8 +68,8 @@ const styles = StyleSheet.create({
     },
     description: {
         color: "#fff",
-        width: "86%",
-        fontSize: 16,
+        fontSize: 17,
+        marginVertical: 3,
     },
     time: {
         color: colors.timeGray,

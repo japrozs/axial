@@ -1,0 +1,12 @@
+mutation createPost($desc: String!) {
+    createPost(desc: $desc) {
+        id
+        creatorId
+        likes
+        description
+        imgUrl
+        createdAt
+        updatedAt
+        __typename
+    }
+}

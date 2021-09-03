@@ -30,6 +30,14 @@ export const MainStack: React.FC<MainStackProps> = ({}) => {
                     borderBottomColor: "#f9f9f9",
                     borderBottomWidth: 0.2,
                 },
+                headerTitleStyle: {
+                    color: "#fff",
+                },
+                tabBarStyle: {
+                    paddingTop: 10,
+                    alignItems: "center",
+                    backgroundColor: colors.dogeBlack,
+                },
                 tabBarShowLabel: false,
                 tabBarActiveTintColor: colors.navigation.active,
                 tabBarInactiveTintColor: colors.navigation.inActive,

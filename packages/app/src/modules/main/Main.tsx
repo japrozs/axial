@@ -12,6 +12,7 @@ import { asUploadButton } from "@rpldy/upload-button";
 import { useApolloClient } from "@apollo/client";
 import { useLoginMutation } from "../../generated/graphql";
 import { PostCard } from "../../components/PostCard";
+import { TextPostCard } from "../../components/TextPostCard";
 
 interface MainProps {}
 
@@ -20,10 +21,13 @@ export const Main: React.FC<MainProps> = ({}) => {
 
     return (
         <ScrollView>
-            <Text>hello world</Text>
-            {data?.getAllPosts.map((post) => (
-                <PostCard post={post} key={post.id} />
-            ))}
+            {data?.getAllPosts.map((post) => {
+                if (post.imgUrl == "") {
+                    return <TextPostCard post={post} key={post.id} />;
+                } else {
+                    return <PostCard post={post} key={post.id} />;
+                }
+            })}
         </ScrollView>
     );
 };

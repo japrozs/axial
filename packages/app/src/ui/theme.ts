@@ -5,14 +5,17 @@ export const postHeight = Dimensions.get("window").width + 80;
 
 export const colors = {
     borderGray: "#a0a0a0",
-    textGray: "#505050",
+    textGray: "#909090",
     wheat: "#E5E7EB",
     gray: "#4B5563",
     dogeBlack: "#0B0E11",
+    dogeGray: "#151A21",
+    dogeTextGray: "#B4B9C0",
     red: "#DC2626",
     timeGray: "#787878",
+    iphoneBlue: "#007AFF",
     navigation: {
-        active: "#000",
+        active: "#fff",
         lightBlack: "#1A202C",
         inActive: "#838383",
     },
@@ -33,5 +36,20 @@ export const globalStyles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
+    },
+
+    button: {
+        backgroundColor: "#151A21",
+        paddingVertical: 15,
+        borderRadius: 3,
+        marginTop: "auto",
+        marginBottom: 10,
+        textAlign: "center",
+    },
+    buttonText: {
+        alignSelf: "center",
+        fontSize: 20,
+        color: "#fff",
+        fontWeight: "600",
     },
 });

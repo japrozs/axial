@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
     },
     name: {
         fontSize: 25,
+        color: "#fff",
         fontWeight: "600",
     },
     username: {

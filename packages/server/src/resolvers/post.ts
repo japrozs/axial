@@ -1,6 +1,14 @@
 import { Post } from "../entities/Post";
 import { isAuth } from "../middleware/isAuth";
-import { Query, Resolver, UseMiddleware } from "type-graphql";
+import {
+    Query,
+    Resolver,
+    UseMiddleware,
+    Mutation,
+    Arg,
+    Ctx,
+} from "type-graphql";
+import { Context } from "../types";
 
 @Resolver()
 export class PostResolver {
@@ -11,5 +19,16 @@ export class PostResolver {
             relations: ["creator"],
             order: { createdAt: "DESC" },
         });
+    }
+
+    @UseMiddleware(isAuth)
+    @Mutation(() => Post)
+    async createPost(@Arg("desc") desc: string, @Ctx() { req }: Context) {
+        const post = await Post.create({
+            imgUrl: "",
+            description: desc,
+            creatorId: req.session.userId,
+        }).save();
+        return post;
     }
 }
