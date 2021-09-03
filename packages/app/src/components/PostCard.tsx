@@ -35,11 +35,14 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 <Text style={styles.likes}>
                     {post.likes} like{post.likes == 1 ? "" : "s"}
                 </Text>
-                <View style={[globalStyles.flex, { alignItems: "stretch" }]}>
-                    <Text style={styles.usernameDesc}>
-                        {post.creator.username}
+                <View>
+                    <Text style={styles.description}>
+                        <Text style={styles.usernameDesc}>
+                            {post.creator.username}
+                        </Text>
+                        {"   "}
+                        {post.description}
                     </Text>
-                    <Text style={styles.description}>{post.description}</Text>
                 </View>
                 <Text style={styles.time}>{timeSince(post.createdAt)} ago</Text>
             </View>
@@ -76,7 +79,6 @@ const styles = StyleSheet.create({
     },
     description: {
         color: "#fff",
-        width: "86%",
         fontSize: 16,
     },
     time: {

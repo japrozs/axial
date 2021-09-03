@@ -7,13 +7,15 @@ import { SelfProfile } from "./main/SelfProfile";
 import { colors, layout } from "../ui/theme";
 import { AntDesign, Entypo, FontAwesome } from "@expo/vector-icons";
 import { Image } from "react-native";
-import { useMeQuery } from "../generated/graphql";
+import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { emptyIcon } from "../constants";
 import { SvgUri } from "react-native-svg";
 import { View } from "react-native";
 import { ProfileImage } from "../components/ProfileImage";
 import { Search } from "./main/Search";
+import { MaterialIcons } from "@expo/vector-icons";
 import { NewPost } from "./main/NewPost";
+import { useApolloClient } from "@apollo/client";
 
 interface MainStackProps {}
 
@@ -22,6 +24,8 @@ const Tab = createBottomTabNavigator<MainStackParamList>();
 
 export const MainStack: React.FC<MainStackProps> = ({}) => {
     const { data, loading } = useMeQuery();
+    const [logout] = useLogoutMutation();
+    const client = useApolloClient();
     return (
         <Tab.Navigator
             initialRouteName={"Home"}
@@ -34,8 +38,6 @@ export const MainStack: React.FC<MainStackProps> = ({}) => {
                     color: "#fff",
                 },
                 tabBarStyle: {
-                    paddingTop: 10,
-                    alignItems: "center",
                     backgroundColor: colors.dogeBlack,
                 },
                 tabBarShowLabel: false,
@@ -55,6 +57,18 @@ export const MainStack: React.FC<MainStackProps> = ({}) => {
                                     ? colors.navigation.active
                                     : colors.navigation.inActive
                             }
+                        />
+                    ),
+                    headerRight: () => (
+                        <MaterialIcons
+                            name="logout"
+                            size={layout.iconSize - 3}
+                            style={{ marginRight: 8 }}
+                            color="#fff"
+                            onPress={async () => {
+                                await logout();
+                                await client.resetStore();
+                            }}
                         />
                     ),
                 }}

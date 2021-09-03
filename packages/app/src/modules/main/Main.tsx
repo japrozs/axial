@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { View, Text, ScrollView, Image } from "react-native";
-import { useGetAllPostsQuery, useMeQuery } from "../../generated/graphql";
+import {
+    useGetAllPostsQuery,
+    useLogoutMutation,
+    useMeQuery,
+} from "../../generated/graphql";
 import { SvgUri } from "react-native-svg";
 import { colors, layout } from "../../ui/theme";
 import { Camera } from "expo-camera";
@@ -18,7 +22,6 @@ interface MainProps {}
 
 export const Main: React.FC<MainProps> = ({}) => {
     const { data, loading } = useGetAllPostsQuery();
-
     return (
         <ScrollView>
             {data?.getAllPosts.map((post) => {
