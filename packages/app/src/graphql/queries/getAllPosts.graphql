@@ -1,0 +1,5 @@
+query getAllPosts {
+    getAllPosts {
+        ...RegularPost
+    }
+}

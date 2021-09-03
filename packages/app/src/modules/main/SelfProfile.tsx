@@ -14,7 +14,7 @@ import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import Axios from "axios";
 import { useApolloClient } from "@apollo/client";
-import { ProfileImage } from "../../ui/ProfileImage";
+import { ProfileImage } from "../../components/ProfileImage";
 
 interface SelfProfileProps {}
 
@@ -75,15 +75,19 @@ export const SelfProfile: React.FC<SelfProfileProps> = ({}) => {
             ) : (
                 <View>
                     <View style={styles.container}>
-                        <View
+                        <TouchableOpacity
+                            onPress={pickImage}
                             style={{
                                 borderRadius: layout.borderRadius,
                                 backgroundColor: "#fff",
                                 overflow: "hidden",
                             }}
                         >
-                            <ProfileImage imgUrl={data?.me?.imgUrl} />
-                        </View>
+                            <ProfileImage
+                                imgUrl={data?.me?.imgUrl}
+                                variant={"regular"}
+                            />
+                        </TouchableOpacity>
                         <View style={styles.info}>
                             <Text style={styles.name}>{data?.me?.name}</Text>
                             <Text style={styles.username}>

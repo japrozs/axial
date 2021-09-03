@@ -1,19 +1,19 @@
-import "reflect-metadata";
-import { COOKIE_NAME, __prod__ } from "./constants";
-import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
-import { UserResolver } from "./resolvers/user";
-import Redis from "ioredis";
-import session from "express-session";
 import connectRedis from "connect-redis";
 import cors from "cors";
-import { createConnection } from "typeorm";
-import { User } from "./entities/User";
+import express from "express";
+import session from "express-session";
+import Redis from "ioredis";
 import path from "path";
-import multer, { FileFilterCallback } from "multer";
-import { v4 } from "uuid";
-import { expressIsAuth } from "./middleware/isAuth";
+import "reflect-metadata";
+import { buildSchema } from "type-graphql";
+import { createConnection } from "typeorm";
+import { COOKIE_NAME, __prod__ } from "./constants";
+import { Post } from "./entities/Post";
+import { User } from "./entities/User";
+import { PostResolver } from "./resolvers/post";
+import router from "./resolvers/upload";
+import { UserResolver } from "./resolvers/user";
 
 // rerun
 const main = async () => {
@@ -25,7 +25,7 @@ const main = async () => {
         logging: true,
         migrations: [path.join(__dirname, "./migrations/*")],
         synchronize: true, // set to false, when wiping the data (i.e. await Post.delete({}); )
-        entities: [User],
+        entities: [User, Post],
     });
     conn.runMigrations();
     const app = express();
@@ -40,6 +40,7 @@ const main = async () => {
         })
     );
     app.use("/images", express.static(path.join(__dirname, "../images/")));
+    app.use(express.json());
     app.use(
         session({
             name: COOKIE_NAME,
@@ -61,7 +62,7 @@ const main = async () => {
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [UserResolver],
+            resolvers: [UserResolver, PostResolver],
             validate: false,
         }),
         context: ({ req, res }) => ({ req, res, redis }),
@@ -72,32 +73,7 @@ const main = async () => {
         cors: false,
     });
 
-    const upload = multer({
-        storage: multer.diskStorage({
-            destination: "images",
-            filename: async (_, _file, callback) => {
-                const name = await v4();
-                callback(null, name + ".jpg"); // e.g. jh34gh2v4y + .png
-            },
-        }),
-        fileFilter: (_, file: any, callback: FileFilterCallback) => {
-            if (file.mimetype == "image/jpeg" || file.mimetype == "image/png") {
-                callback(null, true);
-            } else {
-                callback(new Error("Not an image"));
-            }
-        },
-    });
-
-    app.post(
-        "/upload",
-        expressIsAuth,
-        upload.single("image"),
-        async (req, res) => {
-            console.log(req.file);
-            return res.json({ success: true });
-        }
-    );
+    app.use("/", router);
 
     app.listen(4000, () => {
         console.log("🚀 Server started on localhost:4000");

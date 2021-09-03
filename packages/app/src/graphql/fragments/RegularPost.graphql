@@ -1,0 +1,13 @@
+fragment RegularPost on Post {
+    id
+    creatorId
+    likes
+    creator {
+        ...RegularUser
+    }
+    description
+    imgUrl
+    createdAt
+    updatedAt
+    __typename
+}

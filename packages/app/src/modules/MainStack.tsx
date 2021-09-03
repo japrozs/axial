@@ -5,13 +5,15 @@ import { Main } from "./main/Main";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { SelfProfile } from "./main/SelfProfile";
 import { colors, layout } from "../ui/theme";
-import { Entypo } from "@expo/vector-icons";
+import { AntDesign, Entypo, FontAwesome } from "@expo/vector-icons";
 import { Image } from "react-native";
 import { useMeQuery } from "../generated/graphql";
 import { emptyIcon } from "../constants";
 import { SvgUri } from "react-native-svg";
 import { View } from "react-native";
-import { ProfileImage } from "../ui/ProfileImage";
+import { ProfileImage } from "../components/ProfileImage";
+import { Search } from "./main/Search";
+import { NewPost } from "./main/NewPost";
 
 interface MainStackProps {}
 
@@ -53,6 +55,42 @@ export const MainStack: React.FC<MainStackProps> = ({}) => {
             />
             <Tab.Screen
                 options={{
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) => (
+                        <AntDesign
+                            name="search1"
+                            size={layout.iconSize}
+                            color={
+                                focused
+                                    ? colors.navigation.active
+                                    : colors.navigation.inActive
+                            }
+                        />
+                    ),
+                }}
+                name="Search"
+                component={Search}
+            />
+            <Tab.Screen
+                options={{
+                    headerTitle: "New Post",
+                    tabBarIcon: ({ focused }) => (
+                        <FontAwesome
+                            name="plus-square-o"
+                            size={layout.iconSize}
+                            color={
+                                focused
+                                    ? colors.navigation.active
+                                    : colors.navigation.inActive
+                            }
+                        />
+                    ),
+                }}
+                name="NewPost"
+                component={NewPost}
+            />
+            <Tab.Screen
+                options={{
                     headerTitle: "Profile",
                     tabBarIcon: ({ focused }) => (
                         <View
@@ -74,7 +112,7 @@ export const MainStack: React.FC<MainStackProps> = ({}) => {
                         >
                             <ProfileImage
                                 imgUrl={data?.me?.imgUrl}
-                                small={true}
+                                variant={"icon"}
                             />
                         </View>
                     ),

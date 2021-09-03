@@ -27,6 +27,7 @@
     },
     "dependencies": {
         "@dicebear/avatars": "^4.8.4",
+        "@google-cloud/storage": "^5.14.0",
         "apollo-server-express": "^2.25.0",
         "connect-redis": "^6.0.0",
         "cors": "^2.8.5",
