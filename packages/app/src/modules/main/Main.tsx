@@ -1,37 +1,46 @@
-import React, { useState } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
-import { View, Text, ScrollView, Image } from "react-native";
-import {
-    useGetAllPostsQuery,
-    useLogoutMutation,
-    useMeQuery,
-} from "../../generated/graphql";
-import { SvgUri } from "react-native-svg";
-import { colors, layout } from "../../ui/theme";
-import { Camera } from "expo-camera";
-import * as ImagePicker from "expo-image-picker";
-import Axios from "axios";
-import Uploady from "@rpldy/uploady";
-import { asUploadButton } from "@rpldy/upload-button";
-import { useApolloClient } from "@apollo/client";
-import { useLoginMutation } from "../../generated/graphql";
-import { PostCard } from "../../components/PostCard";
-import { TextPostCard } from "../../components/TextPostCard";
+import { createStackNavigator } from "@react-navigation/stack";
+import React from "react";
+import { StyleSheet } from "react-native";
+import { colors, fonts } from "../../ui/theme";
+import { PostPage } from "./common/PostPage";
+import { HomeStackParamList } from "./Home/HomeNav";
+import { Main as MainPage } from "./Home/Main";
+import { MainStackNav } from "./MainNav";
 
 interface MainProps {}
 
-export const Main: React.FC<MainProps> = ({}) => {
-    const { data, loading } = useGetAllPostsQuery();
+const Stack = createStackNavigator<HomeStackParamList>();
+
+export const Main: React.FC<MainStackNav<"Home">> = ({ navigation }) => {
     return (
-        <ScrollView>
-            {data?.getAllPosts.map((post) => {
-                if (post.imgUrl == "") {
-                    return <TextPostCard post={post} key={post.id} />;
-                } else {
-                    return <PostCard post={post} key={post.id} />;
-                }
-            })}
-        </ScrollView>
+        <Stack.Navigator
+            screenOptions={{
+                headerStyle: {
+                    borderBottomColor: "#f9f9f9",
+                    borderBottomWidth: 0.2,
+                },
+                headerTitleStyle: {
+                    color: colors.white,
+                    fontFamily: fonts.inter_600,
+                },
+            }}
+            initialRouteName={"HomePage"}
+        >
+            <Stack.Screen
+                options={{
+                    headerTitle: "Home",
+                }}
+                name={"HomePage"}
+                component={MainPage}
+            />
+            <Stack.Screen
+                options={{
+                    headerTitle: "Post",
+                }}
+                name={"PostPage"}
+                component={PostPage}
+            />
+        </Stack.Navigator>
     );
 };
 

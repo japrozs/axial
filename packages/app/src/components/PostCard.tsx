@@ -1,17 +1,22 @@
 import React from "react";
 import { Dimensions } from "react-native";
 import { Image, StyleSheet, Text, View } from "react-native";
-import { Post } from "../generated/graphql";
+import { Post, RegularPostFragment } from "../generated/graphql";
 import { colors, fonts, globalStyles, layout, postHeight } from "../ui/theme";
 import { timeSince } from "../utils/timeSince";
 import { ProfileImage } from "./ProfileImage";
 import { Feather } from "@expo/vector-icons";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { MainStackParamList } from "../modules/main/MainNav";
+import { HomeStackParamList } from "../modules/main/Home/HomeNav";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface PostCardProps {
-    post: Post;
+    post: RegularPostFragment;
+    navigation: BottomTabNavigationProp<HomeStackParamList, "HomePage">;
 }
 
-export const PostCard: React.FC<PostCardProps> = ({ post }) => {
+export const PostCard: React.FC<PostCardProps> = ({ post, navigation }) => {
     return (
         <View style={styles.container}>
             <View style={[globalStyles.flex, styles.postHeader]}>
@@ -28,27 +33,44 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 />
             </View>
             <Image source={{ uri: post.imgUrl }} style={styles.img} />
-            <View style={styles.postFooter}>
-                <View>
-                    <Text style={{ color: "#fff" }}>likes area</Text>
-                </View>
-                <Text style={styles.likes}>
-                    {post.likes} like{post.likes == 1 ? "" : "s"}
-                    {"   "}
-                    {post.comments.length} comment
-                    {post.comments.length == 1 ? "" : "s"}
-                </Text>
-                <View>
-                    <Text style={styles.description}>
-                        <Text style={styles.usernameDesc}>
-                            {post.creator.username}
+            <TouchableOpacity
+                onPress={() =>
+                    navigation.navigate("PostPage", {
+                        id: post.id,
+                    })
+                }
+            >
+                <View style={styles.postFooter}>
+                    <View>
+                        <Text style={{ color: "#fff" }}>likes area</Text>
+                    </View>
+                    <Text style={styles.likes}>
+                        {post.likes} like{post.likes == 1 ? "" : "s"}
+                        {"   "}
+                        {post.comments.length} comment
+                        {post.comments.length == 1 ? "" : "s"}
+                    </Text>
+                    <View>
+                        <Text
+                            style={styles.description}
+                            onPress={() =>
+                                navigation.navigate("PostPage", {
+                                    id: post.id,
+                                })
+                            }
+                        >
+                            <Text style={styles.usernameDesc}>
+                                {post.creator.username}
+                            </Text>
+                            {"  "}
+                            {post.description}
                         </Text>
-                        {"  "}
-                        {post.description}
+                    </View>
+                    <Text style={styles.time}>
+                        {timeSince(post.createdAt)} ago
                     </Text>
                 </View>
-                <Text style={styles.time}>{timeSince(post.createdAt)} ago</Text>
-            </View>
+            </TouchableOpacity>
         </View>
     );
 };

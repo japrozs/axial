@@ -1,18 +1,25 @@
 import { Feather } from "@expo/vector-icons";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import React from "react";
 import { StyleSheet } from "react-native";
 import { Text, View } from "react-native";
-import { Post } from "../generated/graphql";
+import { Post, RegularPostFragment } from "../generated/graphql";
+import { HomeStackParamList } from "../modules/main/Home/HomeNav";
+import { MainStackParamList } from "../modules/main/MainNav";
 import { colors, fonts, globalStyles, layout, postHeight } from "../ui/theme";
 import { timeSince } from "../utils/timeSince";
 import { truncate } from "../utils/truncate";
 import { ProfileImage } from "./ProfileImage";
 
 interface TextPostCardProps {
-    post: Post;
+    post: RegularPostFragment;
+    navigation: BottomTabNavigationProp<HomeStackParamList, "HomePage">;
 }
 
-export const TextPostCard: React.FC<TextPostCardProps> = ({ post }) => {
+export const TextPostCard: React.FC<TextPostCardProps> = ({
+    post,
+    navigation,
+}) => {
     return (
         <View style={styles.container}>
             <View style={[globalStyles.flex, styles.postHeader]}>
@@ -34,7 +41,14 @@ export const TextPostCard: React.FC<TextPostCardProps> = ({ post }) => {
                 {post.comments.length} comment
                 {post.comments.length == 1 ? "" : "s"}
             </Text>
-            <Text style={styles.description}>
+            <Text
+                style={styles.description}
+                onPress={() =>
+                    navigation.navigate("PostPage", {
+                        id: post.id,
+                    })
+                }
+            >
                 {truncate(post.description, 98)}
             </Text>
             <Text style={styles.time}>{timeSince(post.createdAt)} ago</Text>

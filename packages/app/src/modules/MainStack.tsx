@@ -34,10 +34,7 @@ export const MainStack: React.FC<MainStackProps> = ({}) => {
                     borderBottomColor: "#f9f9f9",
                     borderBottomWidth: 0.2,
                 },
-                headerTitleStyle: {
-                    color: "#fff",
-                    fontFamily: fonts.inter_600,
-                },
+                headerShown: false,
                 tabBarStyle: {
                     backgroundColor: colors.dogeBlack,
                 },

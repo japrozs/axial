@@ -1,0 +1,5 @@
+query getPost($id: Int!) {
+    getPost(id: $id) {
+        ...RegularPost
+    }
+}

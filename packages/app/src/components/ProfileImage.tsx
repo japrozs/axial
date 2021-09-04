@@ -5,7 +5,7 @@ import { SvgUri } from "react-native-svg";
 import { emptyIcon } from "../constants";
 import { colors, layout } from "../ui/theme";
 
-type VariantProps = "regular" | "icon" | "post";
+type VariantProps = "regular" | "icon" | "post" | "comment" | "small";
 
 interface ProfileImageProps {
     imgUrl: string | undefined;
@@ -32,6 +32,16 @@ export const ProfileImage: React.FC<ProfileImageProps> = ({
         case "post": {
             width = layout.postProfileImgWidth;
             height = layout.postProfileImgHeight;
+            break;
+        }
+        case "comment": {
+            width = 28;
+            height = 28;
+            break;
+        }
+        case "small": {
+            width = 31;
+            height = 31;
             break;
         }
     }

@@ -7,6 +7,7 @@ import {
     Mutation,
     Arg,
     Ctx,
+    Int,
 } from "type-graphql";
 import { Context } from "../types";
 
@@ -30,5 +31,14 @@ export class PostResolver {
             creatorId: req.session.userId,
         }).save();
         return post;
+    }
+
+    @UseMiddleware(isAuth)
+    @Query(() => Post)
+    async getPost(@Arg("id", () => Int) id: number) {
+        return Post.findOne({
+            where: { id: id },
+            relations: ["creator", "comments"],
+        });
     }
 }

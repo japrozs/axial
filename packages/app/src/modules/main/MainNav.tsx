@@ -6,6 +6,9 @@ export type MainStackParamList = {
     SelfProfile: undefined;
     Search: undefined;
     NewPost: undefined;
+    PostPage: {
+        id: number;
+    };
 };
 
 export type MainStackNav<RouteName extends keyof MainStackParamList> = {
