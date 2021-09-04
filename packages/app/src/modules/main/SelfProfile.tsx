@@ -68,43 +68,36 @@ export const SelfProfile: React.FC<SelfProfileProps> = ({}) => {
 
     return (
         <ScrollView>
-            {loading ? (
-                <View>
-                    <Text>Loading...</Text>
+            <View style={styles.container}>
+                <TouchableOpacity
+                    onPress={pickImage}
+                    style={{
+                        borderRadius: layout.borderRadius,
+                        backgroundColor: "#fff",
+                        overflow: "hidden",
+                    }}
+                >
+                    <ProfileImage
+                        imgUrl={data?.me?.imgUrl}
+                        variant={"regular"}
+                    />
+                </TouchableOpacity>
+                <View style={styles.info}>
+                    <Text style={styles.name}>{data?.me?.name}</Text>
+                    <Text style={styles.username}>
+                        <Text style={{ fontWeight: "400" }}>@</Text>
+                        {data?.me?.username}
+                    </Text>
+                    <Text style={styles.email}>{data?.me?.email}</Text>
                 </View>
-            ) : (
-                <View>
-                    <View style={styles.container}>
-                        <TouchableOpacity
-                            onPress={pickImage}
-                            style={{
-                                borderRadius: layout.borderRadius,
-                                backgroundColor: "#fff",
-                                overflow: "hidden",
-                            }}
-                        >
-                            <ProfileImage
-                                imgUrl={data?.me?.imgUrl}
-                                variant={"regular"}
-                            />
-                        </TouchableOpacity>
-                        <View style={styles.info}>
-                            <Text style={styles.name}>{data?.me?.name}</Text>
-                            <Text style={styles.username}>
-                                <Text style={{ fontWeight: "400" }}>@</Text>
-                                {data?.me?.username}
-                            </Text>
-                            <Text style={styles.email}>{data?.me?.email}</Text>
-                        </View>
-                    </View>
-                </View>
-            )}
+            </View>
         </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
+        marginTop: 20,
         padding: 20,
         display: "flex",
         flexDirection: "row",

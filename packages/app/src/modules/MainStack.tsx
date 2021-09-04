@@ -34,6 +34,10 @@ export const MainStack: React.FC<MainStackProps> = ({}) => {
                     borderBottomColor: "#f9f9f9",
                     borderBottomWidth: 0.2,
                 },
+                headerTitleStyle: {
+                    color: "#fff",
+                    fontFamily: fonts.inter_600,
+                },
                 headerShown: false,
                 tabBarStyle: {
                     backgroundColor: colors.dogeBlack,
@@ -55,18 +59,6 @@ export const MainStack: React.FC<MainStackProps> = ({}) => {
                                     ? colors.navigation.active
                                     : colors.navigation.inActive
                             }
-                        />
-                    ),
-                    headerRight: () => (
-                        <MaterialIcons
-                            name="logout"
-                            size={layout.iconSize - 3}
-                            style={{ marginRight: 8 }}
-                            color="#fff"
-                            onPress={async () => {
-                                await logout();
-                                await client.resetStore();
-                            }}
                         />
                     ),
                 }}

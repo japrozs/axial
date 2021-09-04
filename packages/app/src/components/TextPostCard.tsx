@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     username: {
         color: "#fff",
         fontSize: 20,
-        fontWeight: "600",
+        fontFamily: fonts.inter_600,
         paddingLeft: 12,
     },
     img: {
