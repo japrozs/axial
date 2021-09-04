@@ -1,0 +1,9 @@
+fragment RegularPostComment on Comment {
+    id
+    creatorId
+    body
+    postId
+    createdAt
+    updatedAt
+    __typename
+}

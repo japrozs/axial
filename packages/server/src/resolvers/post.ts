@@ -16,7 +16,7 @@ export class PostResolver {
     @Query(() => [Post])
     getAllPosts() {
         return Post.find({
-            relations: ["creator"],
+            relations: ["creator", "comments"],
             order: { createdAt: "DESC" },
         });
     }

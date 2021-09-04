@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 import { View, Text } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { colors, globalStyles, layout } from "../../ui/theme";
+import { colors, fonts, globalStyles, layout } from "../../ui/theme";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { MainStackNav } from "./MainNav";
@@ -172,17 +172,18 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 4,
         height: 60,
+        fontFamily: fonts.inter_500,
         color: "#fff",
         borderWidth: 1,
     },
     heading: {
         fontSize: 25,
-        fontWeight: "600",
+        fontFamily: fonts.inter_600,
     },
     label: {
         color: colors.textGray,
         fontSize: 20,
-        fontWeight: "600",
+        fontFamily: fonts.inter_600,
     },
     titleContainer: {
         alignItems: "center",

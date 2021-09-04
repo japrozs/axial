@@ -1,7 +1,20 @@
 import { Dimensions, StyleSheet } from "react-native";
 
-const iconSize = 32;
+const iconSize = 27;
 export const postHeight = Dimensions.get("window").width + 80;
+export const inputWidth = Dimensions.get("window").width - 50;
+
+export const fonts = {
+    inter_100: "Inter 100",
+    inter_200: "Inter 200",
+    inter_300: "Inter 300",
+    inter_400: "Inter 400",
+    inter_500: "Inter 500",
+    inter_600: "Inter 600",
+    inter_700: "Inter 700",
+    inter_800: "Inter 800",
+    inter_900: "Inter 900",
+};
 
 export const colors = {
     borderGray: "#a0a0a0",
@@ -30,8 +43,8 @@ export const layout = {
     iconSize,
     smallProfileImgHeight: iconSize,
     smallProfileImgWidth: iconSize,
-    postProfileImgHeight: 40,
-    postProfileImgWidth: 40,
+    postProfileImgHeight: 33,
+    postProfileImgWidth: 33,
 };
 
 export const globalStyles = StyleSheet.create({
@@ -43,7 +56,7 @@ export const globalStyles = StyleSheet.create({
 
     button: {
         backgroundColor: "#151A21",
-        paddingVertical: 15,
+        paddingVertical: 11,
         borderRadius: 3,
         marginTop: "auto",
         marginBottom: 10,
@@ -51,8 +64,8 @@ export const globalStyles = StyleSheet.create({
     },
     buttonText: {
         alignSelf: "center",
-        fontSize: 20,
+        fontSize: 19,
         color: "#fff",
-        fontWeight: "600",
+        fontFamily: "Inter 600",
     },
 });

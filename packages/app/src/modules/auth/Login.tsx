@@ -7,9 +7,15 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import { colors, globalStyles } from "../../ui/theme";
+import {
+    colors,
+    fonts,
+    globalStyles,
+    inputWidth,
+    layout,
+} from "../../ui/theme";
 import { Entypo } from "@expo/vector-icons";
-import { useLoginMutation } from "../../generated/graphql";
+import { useLoginMutation, useMeQuery } from "../../generated/graphql";
 import { useApolloClient } from "@apollo/client";
 import { errorToMap } from "../../utils/errorToMap";
 import { AuthStackNav } from "./AuthNav";
@@ -35,7 +41,6 @@ export const Login: React.FC<AuthStackNav<"Login">> = ({ navigation }) => {
                 password,
             },
         });
-
         if (res.data?.login.errors) {
             return setErrors(errorToMap(res.data?.login.errors));
         }
@@ -49,6 +54,7 @@ export const Login: React.FC<AuthStackNav<"Login">> = ({ navigation }) => {
                 value={usernameOrEmail}
                 autoCapitalize={"none"}
                 onChangeText={(t) => setUsernameOrEmail(t)}
+                placeholderTextColor={colors.gray}
                 style={[
                     styles.input,
                     {
@@ -67,6 +73,7 @@ export const Login: React.FC<AuthStackNav<"Login">> = ({ navigation }) => {
             <Text style={styles.label}>Password</Text>
             <TextInput
                 value={password}
+                placeholderTextColor={colors.gray}
                 autoCapitalize={"none"}
                 secureTextEntry={true}
                 onChangeText={(t) => setPassword(t)}
@@ -122,18 +129,20 @@ const styles = StyleSheet.create({
     },
     input: {
         borderWidth: 1,
-        padding: 15,
+        padding: 11,
         fontSize: 18,
         borderRadius: 5,
-        width: 380,
+        width: inputWidth,
         marginVertical: 7,
+        fontFamily: fonts.inter_500,
         color: colors.white,
         fontWeight: "500",
     },
     label: {
         color: colors.white,
+        fontFamily: fonts.inter_600,
         fontSize: 20,
-        fontWeight: "500",
+        fontWeight: "600",
         marginTop: 20,
     },
     button: {
@@ -144,13 +153,14 @@ const styles = StyleSheet.create({
     },
     error: {
         color: colors.errorRed,
-        fontSize: 18,
-        fontWeight: "500",
+        fontSize: 16.5,
+        fontFamily: fonts.inter_500,
     },
     create: {
         color: colors.grayLight,
-        marginTop: 18,
-        fontSize: 18,
+        marginTop: 20,
+        fontFamily: fonts.inter_500,
+        fontSize: 17,
         alignSelf: "center",
     },
 });

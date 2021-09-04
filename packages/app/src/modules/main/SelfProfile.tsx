@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { SvgUri } from "react-native-svg";
 import { useMeQuery } from "../../generated/graphql";
-import { colors, layout } from "../../ui/theme";
+import { colors, fonts, layout } from "../../ui/theme";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import Axios from "axios";
@@ -115,19 +115,19 @@ const styles = StyleSheet.create({
         paddingLeft: 30,
     },
     name: {
-        fontSize: 25,
+        fontSize: 21,
         color: "#fff",
-        fontWeight: "600",
+        fontFamily: fonts.inter_600,
     },
     username: {
-        fontSize: 20,
+        fontSize: 17,
         color: colors.textGray,
-        fontWeight: "500",
+        fontFamily: fonts.inter_500,
         paddingVertical: 3,
     },
     email: {
-        fontSize: 20,
-        fontWeight: "500",
+        fontSize: 17,
+        fontFamily: fonts.inter_500,
         color: colors.textGray,
     },
 });

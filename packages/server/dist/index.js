@@ -16,9 +16,11 @@ const typeorm_1 = require("typeorm");
 const constants_1 = require("./constants");
 const Post_1 = require("./entities/Post");
 const User_1 = require("./entities/User");
+const Comment_1 = require("./entities/Comment");
 const post_1 = require("./resolvers/post");
 const upload_1 = __importDefault(require("./resolvers/upload"));
 const user_1 = require("./resolvers/user");
+const comment_1 = require("./resolvers/comment");
 const main = async () => {
     const conn = await (0, typeorm_1.createConnection)({
         type: "postgres",
@@ -28,16 +30,13 @@ const main = async () => {
         logging: true,
         migrations: [path_1.default.join(__dirname, "./migrations/*")],
         synchronize: true,
-        entities: [User_1.User, Post_1.Post],
+        entities: [User_1.User, Post_1.Post, Comment_1.Comment],
     });
     conn.runMigrations();
     const app = (0, express_1.default)();
     const RedisStore = (0, connect_redis_1.default)(express_session_1.default);
     const redis = new ioredis_1.default();
-    app.use((0, cors_1.default)({
-        origin: "http://localhost:19006",
-        credentials: true,
-    }));
+    app.use((0, cors_1.default)());
     app.use("/images", express_1.default.static(path_1.default.join(__dirname, "../images/")));
     app.use(express_1.default.json());
     app.use((0, express_session_1.default)({
@@ -58,7 +57,7 @@ const main = async () => {
     }));
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: await (0, type_graphql_1.buildSchema)({
-            resolvers: [user_1.UserResolver, post_1.PostResolver],
+            resolvers: [user_1.UserResolver, post_1.PostResolver, comment_1.CommentResolver],
             validate: false,
         }),
         context: ({ req, res }) => ({ req, res, redis }),

@@ -1,9 +1,9 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { Text, View } from "react-native";
 import Constants from "expo-constants";
 import { TextInput } from "react-native-gesture-handler";
-import { colors, layout } from "../../ui/theme";
+import { colors, fonts, layout } from "../../ui/theme";
 import { AntDesign } from "@expo/vector-icons";
 
 interface SearchProps {}
@@ -16,12 +16,13 @@ export const Search: React.FC<SearchProps> = ({}) => {
                     name="search1"
                     style={{ paddingHorizontal: 10 }}
                     size={layout.iconSize - 5}
-                    color={colors.gray}
+                    color={colors.grayLight}
                 />
                 <TextInput
                     style={styles.input}
                     autoCapitalize="none"
                     placeholder={"Search"}
+                    placeholderTextColor={colors.gray}
                 />
             </View>
             <Text>search page</Text>
@@ -36,12 +37,19 @@ const styles = StyleSheet.create({
     inputContainer: {
         display: "flex",
         flexDirection: "row",
-        backgroundColor: colors.wheat,
+        alignItems: "center",
         paddingVertical: 14,
         paddingHorizontal: 3,
     },
     input: {
-        color: "#000",
+        backgroundColor: colors.dogeGray,
+        width: "86%",
+        borderRadius: 3,
+        paddingVertical: 8,
+        marginLeft: 3,
+        paddingLeft: 10,
+        fontFamily: fonts.inter_500,
+        color: colors.white,
         fontSize: 17,
     },
 });

@@ -2,7 +2,7 @@ import React from "react";
 import { Dimensions } from "react-native";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Post } from "../generated/graphql";
-import { colors, globalStyles, layout, postHeight } from "../ui/theme";
+import { colors, fonts, globalStyles, layout, postHeight } from "../ui/theme";
 import { timeSince } from "../utils/timeSince";
 import { ProfileImage } from "./ProfileImage";
 import { Feather } from "@expo/vector-icons";
@@ -34,13 +34,16 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 </View>
                 <Text style={styles.likes}>
                     {post.likes} like{post.likes == 1 ? "" : "s"}
+                    {"   "}
+                    {post.comments.length} comment
+                    {post.comments.length == 1 ? "" : "s"}
                 </Text>
                 <View>
                     <Text style={styles.description}>
                         <Text style={styles.usernameDesc}>
                             {post.creator.username}
                         </Text>
-                        {"   "}
+                        {"  "}
                         {post.description}
                     </Text>
                 </View>
@@ -61,7 +64,7 @@ const styles = StyleSheet.create({
     username: {
         color: "#fff",
         fontSize: 20,
-        fontWeight: "600",
+        fontFamily: fonts.inter_600,
         paddingLeft: 12,
     },
     img: {
@@ -74,18 +77,19 @@ const styles = StyleSheet.create({
     usernameDesc: {
         fontSize: 17,
         color: "#fff",
-        fontWeight: "600",
+        fontFamily: fonts.inter_600,
         paddingRight: 10,
     },
     description: {
         color: "#fff",
         fontSize: 16,
+        fontFamily: fonts.inter_400,
     },
     time: {
         color: colors.timeGray,
         marginTop: 4,
         fontSize: 15,
-        fontWeight: "500",
+        fontFamily: fonts.inter_500,
     },
     more: {
         marginLeft: "auto",
@@ -94,7 +98,7 @@ const styles = StyleSheet.create({
     likes: {
         fontSize: 16,
         color: "#fff",
-        fontWeight: "600",
-        marginBottom: 3,
+        fontFamily: fonts.inter_600,
+        marginBottom: 1,
     },
 });

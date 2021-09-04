@@ -4,7 +4,7 @@ import { MainStackParamList } from "./main/MainNav";
 import { Main } from "./main/Main";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { SelfProfile } from "./main/SelfProfile";
-import { colors, layout } from "../ui/theme";
+import { colors, fonts, layout } from "../ui/theme";
 import { AntDesign, Entypo, FontAwesome } from "@expo/vector-icons";
 import { Image } from "react-native";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
@@ -36,6 +36,7 @@ export const MainStack: React.FC<MainStackProps> = ({}) => {
                 },
                 headerTitleStyle: {
                     color: "#fff",
+                    fontFamily: fonts.inter_600,
                 },
                 tabBarStyle: {
                     backgroundColor: colors.dogeBlack,

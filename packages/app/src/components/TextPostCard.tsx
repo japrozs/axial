@@ -3,7 +3,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { Text, View } from "react-native";
 import { Post } from "../generated/graphql";
-import { colors, globalStyles, layout, postHeight } from "../ui/theme";
+import { colors, fonts, globalStyles, layout, postHeight } from "../ui/theme";
 import { timeSince } from "../utils/timeSince";
 import { truncate } from "../utils/truncate";
 import { ProfileImage } from "./ProfileImage";
@@ -30,6 +30,9 @@ export const TextPostCard: React.FC<TextPostCardProps> = ({ post }) => {
             </View>
             <Text style={styles.likes}>
                 {post.likes} like{post.likes == 1 ? "" : "s"}
+                {"   "}
+                {post.comments.length} comment
+                {post.comments.length == 1 ? "" : "s"}
             </Text>
             <Text style={styles.description}>
                 {truncate(post.description, 98)}
@@ -61,21 +64,22 @@ const styles = StyleSheet.create({
         padding: 14,
     },
     usernameDesc: {
-        fontSize: 17,
+        fontSize: 20,
         color: "#fff",
-        fontWeight: "600",
+        fontFamily: fonts.inter_600,
         paddingRight: 10,
     },
     description: {
         color: "#fff",
-        fontSize: 17,
+        fontSize: 21,
+        fontFamily: fonts.inter_500,
         marginVertical: 3,
     },
     time: {
         color: colors.timeGray,
         marginTop: 4,
         fontSize: 15,
-        fontWeight: "500",
+        fontFamily: fonts.inter_500,
     },
     more: {
         marginLeft: "auto",
@@ -84,7 +88,7 @@ const styles = StyleSheet.create({
     likes: {
         fontSize: 16,
         color: "#fff",
-        fontWeight: "600",
-        marginBottom: 3,
+        fontFamily: fonts.inter_600,
+        marginBottom: 1,
     },
 });

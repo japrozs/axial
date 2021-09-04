@@ -14,6 +14,18 @@ export type Scalars = {
   Float: number;
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  id: Scalars['Float'];
+  creatorId: Scalars['Float'];
+  body: Scalars['String'];
+  creator: User;
+  postId: Scalars['Float'];
+  post: Post;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
 export type FieldError = {
   __typename?: 'FieldError';
   field: Scalars['String'];
@@ -28,6 +40,7 @@ export type Mutation = {
   register: UserResponse;
   login: UserResponse;
   logout?: Maybe<Scalars['Boolean']>;
+  createComment: Comment;
 };
 
 
@@ -57,11 +70,18 @@ export type MutationLoginArgs = {
   usernameOrEmail: Scalars['String'];
 };
 
+
+export type MutationCreateCommentArgs = {
+  comment: Scalars['String'];
+  id: Scalars['Int'];
+};
+
 export type Post = {
   __typename?: 'Post';
   id: Scalars['Float'];
   creatorId: Scalars['Float'];
   creator: User;
+  comments: Array<Comment>;
   description: Scalars['String'];
   likes: Scalars['Float'];
   imgUrl: Scalars['String'];
@@ -100,13 +120,25 @@ export type UsernamePasswordInput = {
   password: Scalars['String'];
 };
 
+export type RegularCommentFragment = { __typename: 'Comment', id: number, creatorId: number, body: string, postId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, username: string, email: string, name: string, bio: string, imgUrl: string, createdAt: string, updatedAt: string }, post: { __typename: 'Post', id: number, creatorId: number, likes: number, description: string, imgUrl: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, username: string, email: string, name: string, bio: string, imgUrl: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: number, createdAt: string, updatedAt: string }> } };
+
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
-export type RegularPostFragment = { __typename: 'Post', id: number, creatorId: number, likes: number, description: string, imgUrl: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, username: string, email: string, name: string, bio: string, imgUrl: string, createdAt: string, updatedAt: string } };
+export type RegularPostFragment = { __typename: 'Post', id: number, creatorId: number, likes: number, description: string, imgUrl: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, username: string, email: string, name: string, bio: string, imgUrl: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: number, createdAt: string, updatedAt: string }> };
+
+export type RegularPostCommentFragment = { __typename: 'Comment', id: number, creatorId: number, body: string, postId: number, createdAt: string, updatedAt: string };
 
 export type RegularUserFragment = { __typename: 'User', id: number, username: string, email: string, name: string, bio: string, imgUrl: string, createdAt: string, updatedAt: string };
 
 export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename: 'User', id: number, username: string, email: string, name: string, bio: string, imgUrl: string, createdAt: string, updatedAt: string }> };
+
+export type CreateCommentMutationVariables = Exact<{
+  comment: Scalars['String'];
+  id: Scalars['Int'];
+}>;
+
+
+export type CreateCommentMutation = { __typename?: 'Mutation', createComment: { __typename: 'Comment', id: number, creatorId: number, body: string, postId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, username: string, email: string, name: string, bio: string, imgUrl: string, createdAt: string, updatedAt: string }, post: { __typename: 'Post', id: number, creatorId: number, likes: number, description: string, imgUrl: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, username: string, email: string, name: string, bio: string, imgUrl: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: number, createdAt: string, updatedAt: string }> } } };
 
 export type CreatePostMutationVariables = Exact<{
   desc: Scalars['String'];
@@ -138,7 +170,7 @@ export type RegisterMutation = { __typename?: 'Mutation', register: { __typename
 export type GetAllPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllPostsQuery = { __typename?: 'Query', getAllPosts: Array<{ __typename: 'Post', id: number, creatorId: number, likes: number, description: string, imgUrl: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, username: string, email: string, name: string, bio: string, imgUrl: string, createdAt: string, updatedAt: string } }> };
+export type GetAllPostsQuery = { __typename?: 'Query', getAllPosts: Array<{ __typename: 'Post', id: number, creatorId: number, likes: number, description: string, imgUrl: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, username: string, email: string, name: string, bio: string, imgUrl: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: number, createdAt: string, updatedAt: string }> }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -158,6 +190,17 @@ export const RegularUserFragmentDoc = gql`
   __typename
 }
     `;
+export const RegularPostCommentFragmentDoc = gql`
+    fragment RegularPostComment on Comment {
+  id
+  creatorId
+  body
+  postId
+  createdAt
+  updatedAt
+  __typename
+}
+    `;
 export const RegularPostFragmentDoc = gql`
     fragment RegularPost on Post {
   id
@@ -166,13 +209,35 @@ export const RegularPostFragmentDoc = gql`
   creator {
     ...RegularUser
   }
+  comments {
+    ...RegularPostComment
+  }
   description
   imgUrl
   createdAt
   updatedAt
   __typename
 }
-    ${RegularUserFragmentDoc}`;
+    ${RegularUserFragmentDoc}
+${RegularPostCommentFragmentDoc}`;
+export const RegularCommentFragmentDoc = gql`
+    fragment RegularComment on Comment {
+  id
+  creatorId
+  body
+  creator {
+    ...RegularUser
+  }
+  postId
+  post {
+    ...RegularPost
+  }
+  createdAt
+  updatedAt
+  __typename
+}
+    ${RegularUserFragmentDoc}
+${RegularPostFragmentDoc}`;
 export const RegularErrorFragmentDoc = gql`
     fragment RegularError on FieldError {
   field
@@ -190,6 +255,40 @@ export const RegularUserResponseFragmentDoc = gql`
 }
     ${RegularErrorFragmentDoc}
 ${RegularUserFragmentDoc}`;
+export const CreateCommentDocument = gql`
+    mutation createComment($comment: String!, $id: Int!) {
+  createComment(id: $id, comment: $comment) {
+    ...RegularComment
+  }
+}
+    ${RegularCommentFragmentDoc}`;
+export type CreateCommentMutationFn = Apollo.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
+
+/**
+ * __useCreateCommentMutation__
+ *
+ * To run a mutation, you first call `useCreateCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCommentMutation, { data, loading, error }] = useCreateCommentMutation({
+ *   variables: {
+ *      comment: // value for 'comment'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCreateCommentMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, options);
+      }
+export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
+export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMutation>;
+export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
 export const CreatePostDocument = gql`
     mutation createPost($desc: String!) {
   createPost(desc: $desc) {

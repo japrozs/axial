@@ -11,9 +11,11 @@ import { createConnection } from "typeorm";
 import { COOKIE_NAME, __prod__ } from "./constants";
 import { Post } from "./entities/Post";
 import { User } from "./entities/User";
+import { Comment } from "./entities/Comment";
 import { PostResolver } from "./resolvers/post";
 import router from "./resolvers/upload";
 import { UserResolver } from "./resolvers/user";
+import { CommentResolver } from "./resolvers/comment";
 
 // rerun
 const main = async () => {
@@ -25,7 +27,7 @@ const main = async () => {
         logging: true,
         migrations: [path.join(__dirname, "./migrations/*")],
         synchronize: true, // set to false, when wiping the data (i.e. await Post.delete({}); )
-        entities: [User, Post],
+        entities: [User, Post, Comment],
     });
     conn.runMigrations();
     const app = express();
@@ -33,12 +35,7 @@ const main = async () => {
     const RedisStore = connectRedis(session);
     const redis = new Redis();
 
-    app.use(
-        cors({
-            origin: "http://localhost:19006",
-            credentials: true,
-        })
-    );
+    app.use(cors());
     app.use("/images", express.static(path.join(__dirname, "../images/")));
     app.use(express.json());
     app.use(
@@ -62,7 +59,7 @@ const main = async () => {
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [UserResolver, PostResolver],
+            resolvers: [UserResolver, PostResolver, CommentResolver],
             validate: false,
         }),
         context: ({ req, res }) => ({ req, res, redis }),

@@ -1,15 +1,14 @@
-fragment RegularPost on Post {
+fragment RegularComment on Comment {
     id
     creatorId
-    likes
+    body
     creator {
         ...RegularUser
     }
-    comments {
-        ...RegularPostComment
+    postId
+    post {
+        ...RegularPost
     }
-    description
-    imgUrl
     createdAt
     updatedAt
     __typename
